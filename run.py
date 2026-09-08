@@ -1,7 +1,8 @@
+ 
 """
 Find Me - Application Launcher
 Made by Legislative
-Launches the FastAPI backend and automatically opens Find Me in your web browser.
+Launches the FastAPI backend and automatically opens Find Me in your web browser locally.
 """
 
 import sys
@@ -34,31 +35,37 @@ def main():
         print("[ERROR] uvicorn is not installed. Please run: pip install -r requirements.txt")
         sys.exit(1)
 
-    port = find_available_port(8000)
-    app_url = f"http://localhost:{port}"
-
+    # Check if running on a cloud platform (which provides a PORT environment variable)
+    is_production = "PORT" in os.environ
+    
+    port = int(os.environ.get("PORT", find_available_port(8000)))
+    host = "0.0.0.0" if is_production else "127.0.0.1"
+    
     print("=" * 70)
     print("  🧭 FIND ME - Public Sector & Global Internship Platform")
     print("  ★ Made by Legislative")
     print("=" * 70)
-    print(f"  ➜ Server running at: {app_url}")
+    print(f"  ➜ Host: {host} | Port: {port}")
     print(f"  ➜ Priority: Government of India (NITI Aayog, RBI, SEBI, ISRO, DRDO, etc.)")
     print(f"  ➜ Skill Up: Skill India, SWAYAM, NPTEL, Google, Microsoft, IBM, AWS")
     print(f"  ➜ Live Feed: Refreshed with visible timestamps & verified portals")
     print(f"  ➜ Press Ctrl+C to stop.")
     print("=" * 70)
 
-    def open_browser():
-        time.sleep(1.2)
-        try:
-            webbrowser.open(app_url)
-        except Exception:
-            pass
+    # Only open the web browser if running locally (not on a cloud server)
+    if not is_production:
+        app_url = f"http://localhost:{port}"
+        def open_browser():
+            time.sleep(1.2)
+            try:
+                webbrowser.open(app_url)
+            except Exception:
+                pass
 
-    import threading
-    threading.Thread(target=open_browser, daemon=True).start()
+        import threading
+        threading.Thread(target=open_browser, daemon=True).start()
 
-    uvicorn.run("backend.main:app", host="127.0.0.1", port=port, log_level="info")
+    uvicorn.run("backend.main:app", host=host, port=port, log_level="info")
 
 if __name__ == "__main__":
     main()
