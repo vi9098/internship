@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Find Me - Discover Government & Global Internships</title>
+  <meta name="description" content="Discover active internships worldwide with premier focus on Government of India, State Governments, public sector bodies, and leading private organizations.">
+  <link rel="icon" type="image/svg+xml" href="/static/images/find_me_logo.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/css/styles.css">
+</head>
+<body>
+
+  <!-- App Header -->
+  <header class="app-header">
+    <div class="header-container">
+      <div class="logo-group" onclick="window.switchView('discover')" title="Find Me - Home">
+        <img src="/static/images/find_me_logo.svg" alt="Find Me Logo" class="logo-icon-svg">
+        <div class="brand-text">
+          <h1>Find Me</h1>
+          <span class="brand-tagline">Indian Public Sector &amp; Global Opportunities</span>
+        </div>
+      </div>
+
+      <!-- Navigation Tabs -->
+      <nav class="nav-tabs" aria-label="Main Navigation">
+        <button type="button" class="nav-tab-btn active" data-view="discover">
+          <span>🔍</span> Discover &amp; Matches
+        </button>
+        <button type="button" class="nav-tab-btn" data-view="tracker">
+          <span>📊</span> Tracker
+          <span class="nav-tab-badge" id="nav-tracker-badge">0</span>
+        </button>
+        <button type="button" class="nav-tab-btn" data-view="skillup">
+          <span>🚀</span> Skill Up
+        </button>
+        <button type="button" class="nav-tab-btn" data-view="compare">
+          <span>⚖️</span> Compare
+          <span class="nav-tab-badge" id="nav-compare-badge">0</span>
+        </button>
+        <button type="button" class="nav-tab-btn" data-view="actionplan">
+          <span>📋</span> Action Plan
+        </button>
+      </nav>
+
+      <!-- Global Actions -->
+      <div class="header-actions">
+        <!-- Currency Selector (Default INR) -->
+        <select id="currency-selector" class="select-control" title="Change currency">
+          <option value="INR" selected>INR (₹)</option>
+          <option value="USD">USD ($)</option>
+          <option value="EUR">EUR (€)</option>
+          <option value="GBP">GBP (£)</option>
+          <option value="CAD">CAD (C$)</option>
+          <option value="AUD">AUD (A$)</option>
+          <option value="JPY">JPY (¥)</option>
+        </select>
+
+        <!-- Dark/Light Mode Switcher -->
+        <button type="button" id="theme-toggle-btn" class="btn-icon" title="Toggle theme">
+          🌙
+        </button>
+
+        <!-- Profile Button -->
+        <button type="button" class="btn-profile btn-profile-trigger">
+          <span>👤</span>
+          <span id="header-profile-name">My Profile</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Official Notice & Live Refresh Timestamp Banner -->
+  <aside class="disclaimer-banner" role="complementary">
+    <div class="disclaimer-banner-content">
+      <div style="display: flex; align-items: center; gap: 0.5rem;">
+        <span>🛡️</span>
+        <span><strong>Official Verification Notice:</strong> Indian Government, State Government, and corporate internship openings must be applied for on official portals.</span>
+      </div>
+      <div class="refresh-status-badge">
+        <span>🔄</span>
+        <span>Verified Feed: <strong id="live-refresh-time">Today, 17:30 IST</strong></span>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main Container -->
+  <main class="main-wrapper">
+
+    <!-- =========================================================================
+         VIEW 1: DISCOVER & MATCHES
+         ========================================================================= -->
+    <section id="view-discover" class="view-section active">
+      <!-- Dashboard Profile Summary Hero -->
+      <div class="dashboard-hero">
+        <div class="hero-info">
+          <h2>Welcome back, <span id="hero-student-name">Aarav</span>! 👋</h2>
+          <p>
+            Personalized matches prioritizing <strong>Government of India</strong>, <strong>State Government</strong>, and top technology organizations.
+          </p>
+          <div class="profile-chip-bar">
+            <span style="font-size: 0.8rem; font-weight: 700; color: var(--text-muted);">Your Profile:</span>
+            <div id="hero-skills-chips" style="display: flex; gap: 0.4rem; flex-wrap: wrap;"></div>
+            <button type="button" class="btn btn-text-sm btn-profile-trigger" style="margin-left: 0.5rem;">
+              ✏️ Edit Profile
+            </button>
+          </div>
+        </div>
+
+        <div class="hero-stats-grid">
+          <div class="hero-stat-card">
+            <div class="hero-stat-number" id="stat-gov-india-opps">9</div>
+            <div class="hero-stat-label">🇮🇳 Govt of India</div>
+          </div>
+          <div class="hero-stat-card">
+            <div class="hero-stat-number" id="stat-state-gov-opps">2</div>
+            <div class="hero-stat-label">🏛️ State Govts</div>
+          </div>
+          <div class="hero-stat-card">
+            <div class="hero-stat-number" id="stat-high-matches">0</div>
+            <div class="hero-stat-label">High Matches (&gt;75%)</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Directory Layout -->
+      <div class="directory-layout">
+        <!-- Filters Sidebar -->
+        <aside class="filter-panel" aria-label="Internship Filters">
+          <div class="filter-header">
+            <h3><span>🎛️</span> Filter Portals</h3>
+            <button type="button" class="btn-text-sm" id="btn-reset-filters">Reset All</button>
+          </div>
+
+          <!-- Keyword Search -->
+          <div class="filter-group">
+            <label class="filter-label" for="search-query">Search Keywords</label>
+            <div class="search-input-wrapper">
+              <span class="search-icon-pos">🔍</span>
+              <input type="text" id="search-query" class="search-input" placeholder="e.g. NITI Aayog, ISRO, Python, SEBI...">
+            </div>
+          </div>
+
+          <!-- Sector & Government Priority Pills -->
+          <div class="filter-group">
+            <label class="filter-label">Sector Priority</label>
+            <div class="pill-selector">
+              <span class="pill-opt filter-sector-pill active" data-sector="all">All</span>
+              <span class="pill-opt pill-opt-india filter-sector-pill" data-sector="Government of India">🇮🇳 Govt of India</span>
+              <span class="pill-opt filter-sector-pill" data-sector="State Government">🏛️ State Govt</span>
+              <span class="pill-opt filter-sector-pill" data-sector="Private">Private</span>
+              <span class="pill-opt filter-sector-pill" data-sector="Nonprofit">Nonprofit</span>
+            </div>
+          </div>
+
+          <!-- Work Mode -->
+          <div class="filter-group">
+            <label class="filter-label">Work Mode</label>
+            <div class="pill-selector">
+              <span class="pill-opt filter-workmode-pill active" data-workmode="all">All</span>
+              <span class="pill-opt filter-workmode-pill" data-workmode="Onsite">Onsite</span>
+              <span class="pill-opt filter-workmode-pill" data-workmode="Hybrid">Hybrid</span>
+              <span class="pill-opt filter-workmode-pill" data-workmode="Remote">Remote</span>
+            </div>
+          </div>
+
+          <!-- Country Filter -->
+          <div class="filter-group">
+            <label class="filter-label" for="filter-country">Country / Region</label>
+            <select id="filter-country" class="filter-select">
+              <option value="all">All Regions</option>
+              <option value="India" selected>India (Primary Focus)</option>
+              <option value="Switzerland">Switzerland (CERN)</option>
+              <option value="United States">United States</option>
+              <option value="United Kingdom">United Kingdom</option>
+            </select>
+          </div>
+
+          <!-- Desired Industry -->
+          <div class="filter-group">
+            <label class="filter-label" for="filter-industry">Target Industry</label>
+            <select id="filter-industry" class="filter-select">
+              <option value="all">All Industries</option>
+              <option value="Government & Public Policy">Government &amp; Public Policy</option>
+              <option value="Space & Aerospace">Space &amp; Aerospace</option>
+              <option value="Finance & Economics">Finance &amp; Economics (RBI, SEBI)</option>
+              <option value="Technology & Software">Technology &amp; Software</option>
+              <option value="AI & Machine Learning">AI &amp; Machine Learning</option>
+              <option value="Climate & Clean Energy">Climate &amp; Clean Energy (ONGC)</option>
+              <option value="International Relations">International Relations (MEA, UN)</option>
+            </select>
+          </div>
+
+          <!-- Qualification Level -->
+          <div class="filter-group">
+            <label class="filter-label" for="filter-education">Education Level</label>
+            <select id="filter-education" class="filter-select">
+              <option value="all">Any Degree Level</option>
+              <option value="Bachelor's">Bachelor's Degree (B.Tech/BE/BA/B.Sc/B.Com)</option>
+              <option value="Master's">Master's Degree (M.Tech/MBA/MA/M.Sc)</option>
+              <option value="PhD">Doctoral / Research</option>
+              <option value="Bootcamp">Bootcamp / Associate</option>
+            </select>
+          </div>
+
+          <!-- Minimum Match Score Slider -->
+          <div class="filter-group">
+            <label class="filter-label">Minimum Match Score</label>
+            <div class="slider-group">
+              <input type="range" id="filter-min-score" class="range-slider" min="0" max="95" step="5" value="0">
+              <span id="min-score-badge" class="slider-val-badge">0%</span>
+            </div>
+          </div>
+        </aside>
+
+        <!-- Internship Listings Results -->
+        <main class="results-container">
+          <div class="results-header">
+            <div class="results-count">
+              Found <span id="visible-results-count">0</span> Active Opportunities
+            </div>
+            <div class="results-sorting">
+              <label for="filter-sort-by" style="font-size: 0.85rem; color: var(--text-muted); font-weight: 600;">Sort By:</label>
+              <select id="filter-sort-by" class="select-control">
+                <option value="match">Highest Match Score (Priority Boosted)</option>
+                <option value="deadline">Deadline (Open &amp; Soonest First)</option>
+                <option value="stipend">Highest Monthly Stipend</option>
+                <option value="title">Program Name (A-Z)</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Cards Grid -->
+          <div class="internship-cards-grid" id="internship-cards-container">
+            <!-- Dynamic Cards Populated by match.js -->
+          </div>
+        </main>
+      </div>
+    </section>
+
+    <!-- =========================================================================
+         VIEW 2: APPLICATION TRACKER
+         ========================================================================= -->
+    <section id="view-tracker" class="view-section">
+      <div class="tracker-header">
+        <div>
+          <h2 style="font-size: 1.5rem; font-weight: 800;">Application Tracking Pipeline</h2>
+          <p style="color: var(--text-secondary); font-size: 0.9rem;">
+            Keep track of official portal submissions, bonafide NOC letters, and interview schedules.
+          </p>
+        </div>
+      </div>
+
+      <!-- Metrics Summary -->
+      <div class="tracker-metrics-grid">
+        <div class="metric-pill-card">
+          <h5>Total Tracked</h5>
+          <div class="metric-val" id="metric-total-tracked">0</div>
+        </div>
+        <div class="metric-pill-card">
+          <h5>📌 Saved</h5>
+          <div class="metric-val" id="metric-saved-count">0</div>
+        </div>
+        <div class="metric-pill-card">
+          <h5>📝 Applied</h5>
+          <div class="metric-val" id="metric-applied-count" style="color: var(--primary);">0</div>
+        </div>
+        <div class="metric-pill-card">
+          <h5>💬 Interviewing</h5>
+          <div class="metric-val" id="metric-interview-count" style="color: var(--warning);">0</div>
+        </div>
+        <div class="metric-pill-card">
+          <h5>🎉 Offers Received</h5>
+          <div class="metric-val" id="metric-offer-count" style="color: var(--success);">0</div>
+        </div>
+      </div>
+
+      <!-- Kanban Board -->
+      <div class="kanban-board" id="kanban-board-container">
+        <!-- Rendered by tracker.js -->
+      </div>
+    </section>
+
+    <!-- =========================================================================
+         VIEW 3: SKILL UP (FREE COURSES & CERTIFICATIONS)
+         ========================================================================= -->
+    <section id="view-skillup" class="view-section">
+      <div class="skillup-hero">
+        <h2>Skill Up: National &amp; Enterprise Free Skilling Hub 🚀</h2>
+        <p style="color: var(--text-secondary); font-size: 0.925rem;">
+          Bridging qualification gaps for government and private internships with accredited certifications from
+          <strong>Skill India</strong>, <strong>SWAYAM &amp; NPTEL</strong>, <strong>Google</strong>, <strong>Microsoft</strong>,
+          <strong>IBM</strong>, <strong>AWS</strong>, <strong>Salesforce</strong>, <strong>Meta</strong>, and <strong>Cisco</strong>.
+        </p>
+
+        <div style="margin-top: 1rem;">
+          <strong style="font-size: 0.85rem; color: var(--text-primary);">Top Skill Gaps in Active Internships:</strong>
+          <div class="gap-highlight-tags" id="skillup-gap-tags">
+            <!-- Dynamic gap pills -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Course Filters -->
+      <div style="display: flex; gap: 0.75rem; margin-bottom: 1.5rem; flex-wrap: wrap;">
+        <select id="skillup-filter-provider" class="select-control">
+          <option value="all">All Trusted Skilling Providers</option>
+          <option value="Indian Government & NPTEL">🇮🇳 SWAYAM &amp; NPTEL (IITs)</option>
+          <option value="Skill India & NSDC">🇮🇳 Skill India &amp; NSDC</option>
+          <option value="Google">Google Cloud &amp; Skills Boost</option>
+          <option value="Microsoft">Microsoft Learn</option>
+          <option value="IBM">IBM SkillsBuild</option>
+          <option value="AWS">AWS Skill Builder</option>
+          <option value="Salesforce">Salesforce Trailhead</option>
+          <option value="Meta">Meta Blueprint</option>
+          <option value="Cisco">Cisco Networking Academy</option>
+          <option value="HubSpot">HubSpot Academy</option>
+          <option value="LinkedIn Learning">LinkedIn Learning</option>
+          <option value="freeCodeCamp">freeCodeCamp</option>
+          <option value="MIT OpenCourseWare">MIT OpenCourseWare</option>
+        </select>
+
+        <select id="skillup-filter-skill" class="select-control">
+          <option value="all">All Skills</option>
+          <!-- Filled dynamically -->
+        </select>
+
+        <select id="skillup-filter-level" class="select-control">
+          <option value="all">All Difficulty Levels</option>
+          <option value="Beginner">Beginner</option>
+          <option value="Intermediate">Intermediate</option>
+          <option value="Advanced">Advanced</option>
+        </select>
+      </div>
+
+      <!-- Courses Grid -->
+      <div class="courses-grid" id="courses-cards-container">
+        <!-- Rendered by skillup.js -->
+      </div>
+    </section>
+
+    <!-- =========================================================================
+         VIEW 4: SIDE-BY-SIDE COMPARISON
+         ========================================================================= -->
+    <section id="view-compare" class="view-section">
+      <div style="margin-bottom: 1.5rem;">
+        <h2 style="font-size: 1.5rem; font-weight: 800;">Side-by-Side Internship Comparison</h2>
+        <p style="color: var(--text-secondary); font-size: 0.9rem;">
+          Compare eligibility, government reservations, stipends, and deadlines across selected programs.
+        </p>
+      </div>
+
+      <div id="compare-table-container">
+        <!-- Rendered by compare.js -->
+      </div>
+    </section>
+
+    <!-- =========================================================================
+         VIEW 5: PERSONALIZED ACTION PLAN
+         ========================================================================= -->
+    <section id="view-actionplan" class="view-section">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; flex-wrap: wrap; gap: 0.75rem;">
+        <div>
+          <h2 style="font-size: 1.5rem; font-weight: 800;">Personalized Career Action Plan</h2>
+          <p style="color: var(--text-secondary); font-size: 0.9rem;">
+            A strategic roadmap highlighting priority Indian Government applications, open deadlines, and accredited skills to study.
+          </p>
+        </div>
+        <button type="button" class="btn btn-outline" id="btn-refresh-plan">
+          🔄 Regenerate Plan
+        </button>
+      </div>
+
+      <div id="actionplan-content-area">
+        <!-- Rendered by actionplan.js -->
+      </div>
+    </section>
+
+  </main>
+
+  <!-- =========================================================================
+       FOOTER (MADE BY LEGISLATIVE)
+       ========================================================================= -->
+  <footer class="app-footer">
+    <div class="footer-inner-container">
+      <!-- Brand & Maker Info -->
+      <div class="footer-brand-column">
+        <div class="footer-brand-title">
+          <img src="/static/images/find_me_logo.svg" alt="Find Me" style="width: 32px; height: 32px; border-radius: 8px;">
+          <span>Find Me</span>
+        </div>
+        <p class="footer-brand-desc">
+          A modern career discovery platform empowering students to discover verified public-sector, Indian Government, and global enterprise internships based on skills and qualifications.
+        </p>
+        <div class="maker-signature-box">
+          <span>Crafted with pride by</span>
+          <strong>Legislative</strong>
+        </div>
+        <div class="footer-social-links">
+          <!-- LinkedIn Link (Configurable) -->
+          <a href="https://www.linkedin.com/in/vivekanand-rai-b270b0399" target="_blank" rel="noopener noreferrer" class="social-btn" title="Maker LinkedIn Profile">
+            <svg class="social-icon-svg" viewBox="0 0 24 24"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.46 8.76a1.62 1.62 0 1 0 0-3.24 1.62 1.62 0 0 0 0 3.24M7.85 18.5V10.1H5.06v8.4h2.79Z"/></svg>
+            <span>LinkedIn</span>
+          </a>
+          <!-- GitHub Link (Configurable) -->
+          <a href="https://github.com/vi9098" target="_blank" rel="noopener noreferrer" class="social-btn" title="Project / Maker GitHub">
+            <svg class="social-icon-svg" viewBox="0 0 24 24"><path d="M12 2A10 10 0 0 0 2 12c0 4.42 2.87 8.17 6.84 9.5.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34-.46-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.87 1.52 2.34 1.07 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.92 0-1.11.38-2 1.03-2.71-.1-.25-.45-1.29.1-2.64 0 0 .84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33.85 0 1.71.11 2.5.33 1.91-1.29 2.75-1.02 2.75-1.02.55 1.35.2 2.39.1 2.64.65.71 1.03 1.6 1.03 2.71 0 3.82-2.34 4.66-4.57 4.91.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0 0 12 2Z"/></svg>
+            <span>GitHub</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Quick Platform Links -->
+      <div class="footer-links-column">
+        <h4>Navigation</h4>
+        <ul class="footer-nav-list">
+          <li><button type="button" class="footer-nav-link" onclick="window.switchView('discover')">Browse Internships</button></li>
+          <li><button type="button" class="footer-nav-link" onclick="window.switchView('tracker')">Application Tracker</button></li>
+          <li><button type="button" class="footer-nav-link" onclick="window.switchView('skillup')">Skill Up Hub (Free Courses)</button></li>
+          <li><button type="button" class="footer-nav-link" onclick="window.switchView('compare')">Compare Portals</button></li>
+          <li><button type="button" class="footer-nav-link" onclick="window.switchView('actionplan')">Personal Action Plan</button></li>
+        </ul>
+      </div>
+
+      <!-- Institutional & Policy Information -->
+      <div class="footer-links-column">
+        <h4>Transparency</h4>
+        <ul class="footer-nav-list">
+          <li><button type="button" class="footer-nav-link" data-footer-modal="about">About Find Me</button></li>
+          <li><button type="button" class="footer-nav-link" data-footer-modal="datasources">Verified Data Sources</button></li>
+          <li><button type="button" class="footer-nav-link" data-footer-modal="privacy">Privacy Policy</button></li>
+          <li><button type="button" class="footer-nav-link" data-footer-modal="terms">Terms of Use</button></li>
+          <li><button type="button" class="footer-nav-link" data-footer-modal="contact">Contact &amp; Feedback</button></li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Bottom Copyright Bar -->
+    <div class="footer-bottom-bar">
+      <div>© 2026 <strong>Find Me</strong> • Made by <strong>Legislative</strong> • Dedicated to student career enablement.</div>
+      <div>Official Government notifications are property of respective Government of India and State Government ministries.</div>
+    </div>
+  </footer>
+
+  <!-- =========================================================================
+       MODAL: GENERIC INFO MODAL (ABOUT, PRIVACY, TERMS, CONTACT, DATA SOURCES)
+       ========================================================================= -->
+  <div class="modal-overlay" id="generic-info-modal" role="dialog" aria-modal="true" aria-labelledby="generic-modal-title">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3 id="generic-modal-title">Information</h3>
+        <button type="button" class="btn-icon" onclick="document.getElementById('generic-info-modal').classList.remove('active')" style="width: 32px; height: 32px;">✕</button>
+      </div>
+      <div class="modal-body" id="generic-modal-content">
+        <!-- Rendered dynamically by app.js -->
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" onclick="document.getElementById('generic-info-modal').classList.remove('active')">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       MODAL: PROFILE ONBOARDING WIZARD
+       ========================================================================= -->
+  <div class="modal-overlay" id="profile-modal" role="dialog" aria-modal="true" aria-labelledby="profile-wizard-title">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3 id="profile-wizard-title">Personalize Your Profile (Find Me)</h3>
+        <button type="button" class="btn-icon" id="profile-modal-close" style="width: 32px; height: 32px;">✕</button>
+      </div>
+
+      <div class="modal-body">
+        <div class="wizard-steps-nav">
+          <div class="step-indicator active" id="step-ind-1">
+            <span class="step-circle">1</span> Education
+          </div>
+          <div class="step-indicator" id="step-ind-2">
+            <span class="step-circle">2</span> Skills
+          </div>
+          <div class="step-indicator" id="step-ind-3">
+            <span class="step-circle">3</span> Preferences
+          </div>
+          <div class="step-indicator" id="step-ind-4">
+            <span class="step-circle">4</span> Eligibility
+          </div>
+        </div>
+
+        <!-- Step 1: Education -->
+        <div class="form-step active" id="profile-step-1">
+          <div class="form-row">
+            <label class="form-label" for="prof-name">Student Name</label>
+            <input type="text" id="prof-name" class="form-input" placeholder="e.g. Aarav Sharma">
+          </div>
+
+          <div class="form-row">
+            <label class="form-label" for="prof-edu-level">Current Degree Level</label>
+            <select id="prof-edu-level" class="form-input">
+              <option value="High School">High School / 12th Standard</option>
+              <option value="Bachelor's" selected>Bachelor's Degree (B.Tech, BE, B.Sc, BA, B.Com, LLB)</option>
+              <option value="Master's">Master's Degree (M.Tech, MBA, M.Sc, MA, LLM)</option>
+              <option value="PhD">Doctoral / PhD Fellow</option>
+              <option value="Bootcamp">Diploma / Polytechnic / Self-Taught</option>
+            </select>
+          </div>
+
+          <div class="form-row">
+            <label class="form-label" for="prof-degree">Field of Study / Major</label>
+            <input type="text" id="prof-degree" class="form-input" placeholder="e.g. Computer Science, Public Policy, Economics...">
+          </div>
+
+          <div class="form-row">
+            <label class="form-label" for="prof-grad-year">Expected Graduation Year</label>
+            <select id="prof-grad-year" class="form-input">
+              <option value="2025">2025</option>
+              <option value="2026">2026</option>
+              <option value="2027" selected>2027</option>
+              <option value="2028">2028</option>
+              <option value="2029">2029</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Step 2: Skills & Languages -->
+        <div class="form-step" id="profile-step-2">
+          <div class="form-row">
+            <label class="form-label">Your Active Skills (Click to toggle):</label>
+            <div id="profile-selected-skills" style="display: flex; flex-wrap: wrap; gap: 0.4rem; min-height: 40px; margin-bottom: 0.5rem;"></div>
+          </div>
+
+          <div class="form-row">
+            <label class="form-label" style="font-size: 0.8rem; color: var(--text-muted);">Quick Add Skills:</label>
+            <div class="tag-selector-pool" id="skill-tag-pool"></div>
+          </div>
+
+          <div class="form-row" style="margin-top: 0.75rem;">
+            <label class="form-label" for="custom-skill-input">Add Other Skill</label>
+            <div style="display: flex; gap: 0.5rem;">
+              <input type="text" id="custom-skill-input" class="form-input" placeholder="e.g. Econometrics, PyTorch, Go...">
+              <button type="button" class="btn btn-secondary" id="btn-add-custom-skill">+ Add</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 3: Preferences & Work Style -->
+        <div class="form-step" id="profile-step-3">
+          <div class="form-row">
+            <label class="form-label">Preferred Location / Region:</label>
+            <div class="pill-selector" id="country-pills-container" style="margin-top: 0.4rem;"></div>
+          </div>
+
+          <div class="form-row" style="margin-top: 1rem;">
+            <label class="form-label">Target Industry:</label>
+            <div class="pill-selector" id="industry-pills-container" style="margin-top: 0.4rem;"></div>
+          </div>
+
+          <div class="form-row" style="margin-top: 1rem;">
+            <label style="display: flex; align-items: center; gap: 0.6rem; cursor: pointer;">
+              <input type="checkbox" id="prof-prefer-remote" style="width: 18px; height: 18px; accent-color: var(--primary);">
+              <span style="font-weight: 600; font-size: 0.9rem;">I prefer remote-friendly opportunities</span>
+            </label>
+          </div>
+
+          <div class="form-row">
+            <label class="form-label" for="prof-exp-level">Prior Internship Experience</label>
+            <select id="prof-exp-level" class="form-input">
+              <option value="No prior experience">First-time intern</option>
+              <option value="Less than 1 year">Less than 1 year (Projects / College clubs)</option>
+              <option value="1-2 years">1 - 2 years</option>
+              <option value="3+ years">3+ years</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Step 4: Government Eligibility -->
+        <div class="form-step" id="profile-step-4">
+          <div class="form-row">
+            <label class="form-label" for="prof-citizenship">Primary Citizenship</label>
+            <select id="prof-citizenship" class="form-input">
+              <option value="India" selected>India (Eligible for Govt of India, State Govts &amp; Global)</option>
+              <option value="United States">United States</option>
+              <option value="European Union / EEA">European Union / EEA</option>
+              <option value="United Kingdom">United Kingdom</option>
+              <option value="Singapore">Singapore</option>
+              <option value="Other / International">Other / International</option>
+            </select>
+          </div>
+
+          <div class="form-row" style="margin-top: 1rem; background: var(--bg-secondary); padding: 1rem; border-radius: var(--radius-md);">
+            <label style="display: flex; align-items: flex-start; gap: 0.6rem; cursor: pointer;">
+              <input type="checkbox" id="prof-gov-eligible" checked style="width: 20px; height: 20px; accent-color: var(--sector-gov); margin-top: 2px;">
+              <div>
+                <strong style="display: block; font-size: 0.9rem; color: var(--text-primary);">
+                  Prioritize Government &amp; Public Sector Opportunities
+                </strong>
+                <span style="font-size: 0.8rem; color: var(--text-muted); display: block; margin-top: 0.2rem;">
+                  Recommends official programs from NITI Aayog, Reserve Bank of India, SEBI, ISRO, DRDO, MeitY, MEA, Railways, State Governments, and CERN/UN.
+                </span>
+              </div>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" id="wizard-prev-btn" style="display: none;">
+          ← Back
+        </button>
+        <button type="button" class="btn btn-primary" id="wizard-next-btn">
+          Next Step →
+        </button>
+        <button type="button" class="btn btn-success" id="wizard-save-btn" style="display: none;">
+          ✓ Save Profile &amp; Match
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       MODAL: INTERNSHIP DETAIL MODAL
+       ========================================================================= -->
+  <div class="modal-overlay" id="detail-modal" role="dialog" aria-modal="true" aria-labelledby="detail-modal-title">
+    <div class="modal-box" style="max-width: 750px;">
+      <div class="modal-header">
+        <h3 id="detail-modal-title">Internship Opportunity Details</h3>
+        <button type="button" class="btn-icon" onclick="document.getElementById('detail-modal').classList.remove('active')" style="width: 32px; height: 32px;">✕</button>
+      </div>
+      <div class="modal-body" id="detail-modal-content">
+        <!-- Rendered dynamically -->
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       MODAL: APPLICATION TRACKING PROMPT
+       ========================================================================= -->
+  <div class="modal-overlay" id="tracker-modal" role="dialog" aria-modal="true" aria-labelledby="tracker-modal-title">
+    <div class="modal-box" style="max-width: 500px;">
+      <div class="modal-header">
+        <h3 id="tracker-modal-title">Application Status &amp; Notes</h3>
+        <button type="button" class="btn-icon" onclick="document.getElementById('tracker-modal').classList.remove('active')" style="width: 32px; height: 32px;">✕</button>
+      </div>
+      <div class="modal-body" id="tracker-modal-content">
+        <!-- Rendered dynamically -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="/static/js/app.js"></script>
+  <script src="/static/js/profile.js"></script>
+  <script src="/static/js/match.js"></script>
+  <script src="/static/js/tracker.js"></script>
+  <script src="/static/js/skillup.js"></script>
+  <script src="/static/js/compare.js"></script>
+  <script src="/static/js/actionplan.js"></script>
+</body>
+</html>
